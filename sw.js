@@ -1,1 +1,35 @@
-const C='platzspiel-v02';const A=['./','./index.html','./style.css','./app.js','./manifest.webmanifest'];self.addEventListener('install',e=>e.waitUntil(caches.open(C).then(c=>c.addAll(A))));self.addEventListener('fetch',e=>e.respondWith(caches.match(e.request).then(r=>r||fetch(e.request))));
+const CACHE='platzspiel-v0.2.1';
+const ASSETS=['./','./index.html','./style.css?v=0.2.1','./app.js?v=0.2.1','./manifest.webmanifest?v=0.2.1'];
+
+self.addEventListener('install',event=>{
+  self.skipWaiting();
+  event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));
+});
+
+self.addEventListener('activate',event=>{
+  event.waitUntil((async()=>{
+    const names=await caches.keys();
+    await Promise.all(names.filter(name=>name!==CACHE).map(name=>caches.delete(name)));
+    await self.clients.claim();
+  })());
+});
+
+self.addEventListener('fetch',event=>{
+  const request=event.request;
+  if(request.method!=='GET') return;
+  const url=new URL(request.url);
+  if(url.origin!==self.location.origin) return;
+
+  event.respondWith((async()=>{
+    try{
+      const response=await fetch(request,{cache:'no-store'});
+      if(response && response.ok){
+        const cache=await caches.open(CACHE);
+        cache.put(request,response.clone());
+      }
+      return response;
+    }catch(error){
+      return (await caches.match(request)) || (await caches.match('./index.html'));
+    }
+  })());
+});
