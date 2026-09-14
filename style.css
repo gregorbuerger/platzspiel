@@ -11,3 +11,8 @@
 .board.restaurant .table-group:nth-child(2){transform:translateX(18px)}
 .board.restaurant .table-group:nth-child(3){transform:translateX(-10px)}
 @media(max-width:370px){.board.restaurant .table-group:nth-child(1){transform:translateX(-18px)}.board.restaurant .table-group:nth-child(2){transform:translateX(18px)}.board.restaurant .table-group:nth-child(3){transform:translateX(-6px)}}
+/* v0.4: level-specific free positioning stays inside the viewport */
+.board.offset .table-group:nth-child(1){transform:translateX(-8%)}
+.board.offset .table-group:nth-child(2){transform:translateX(8%)}
+.board.offset .table-group:nth-child(3){transform:translateX(-3%)}
+#next:not([hidden]){display:inline-block}
