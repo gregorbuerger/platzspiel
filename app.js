@@ -22,7 +22,7 @@ function bindDrag(p){
     if(e.pointerType==='mouse'&&e.button!==0)return;
     const sx=e.clientX,sy=e.clientY,home=p.parentElement,sib=p.nextSibling;
     let drag=false,lastX=sx,lastY=sy,longPressTimer=null;
-    const DRAG_Y_OFFSET=68,LONG_PRESS_MS=280;
+    const DRAG_Y_OFFSET=68,LONG_PRESS_MS=150;
     function setDragPosition(x,y){p.style.left=x+'px';p.style.top=(y-DRAG_Y_OFFSET)+'px'}
     function startDrag(x,y){
       if(drag)return;
@@ -65,4 +65,4 @@ function bindDrag(p){
 }
 function complete(){const sol=levels[levelIndex].solution,seats=[...board.querySelectorAll('.seat')];if(seats.every((s,i)=>s.querySelector('.person')?.dataset.id===sol[i])){status.textContent=`Level ${levelIndex+1} geschafft! 🎉`;status.className='status good';if(levelIndex<levels.length-1){next.hidden=false;localStorage.setItem('platzspiel-level',String(levelIndex+1))}else{status.textContent='Alle drei Testlevel geschafft! 🎉'}navigator.vibrate?.([50,40,80])}}
 document.querySelector('#reset').onclick=reset;next.onclick=()=>{if(levelIndex<levels.length-1){levelIndex++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}};
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=0.4.5',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));renderLevel();
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=0.4.6',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));renderLevel();

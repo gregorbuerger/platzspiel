@@ -23,5 +23,5 @@ header{text-align:center}h1{font-size:2.55rem;letter-spacing:-.045em;text-shadow
 
 /* v0.4.4: Die gezogene Figur schwebt sichtbar oberhalb des Fingers. */
 .person.dragging{width:64px;height:64px;transform:translate(-50%,-50%) scale(1.16);box-shadow:0 14px 0 #c8ae91,0 20px 28px #0004;filter:drop-shadow(0 2px 1px #fff8);}
-/* v0.4.5: Long-press pickup */
+/* v0.4.6: 150 ms long-press pickup */
 .person.longpress-ready{transform:translateY(-8px) scale(1.06);box-shadow:0 12px 22px #0003}
