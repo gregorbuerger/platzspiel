@@ -1,5 +1,5 @@
-const CACHE='platzspiel-v0.2.1';
-const ASSETS=['./','./index.html','./style.css?v=0.2.1','./app.js?v=0.2.1','./manifest.webmanifest?v=0.2.1'];
+const CACHE='platzspiel-v0.2.2';
+const ASSETS=['./','./index.html','./style.css?v=0.2.2','./app.js?v=0.2.2','./manifest.webmanifest?v=0.2.2'];
 
 self.addEventListener('install',event=>{
   self.skipWaiting();
