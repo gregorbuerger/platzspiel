@@ -17,7 +17,40 @@ function makePerson([id,face]){const p=document.createElement('div');p.className
 function shuffled(a){return [...a].sort(()=>Math.random()-.5)}
 function renderLevel(){const L=levels[levelIndex];document.querySelector('#sceneLabel').textContent=L.name;document.querySelector('#intro').textContent=L.intro;document.querySelector('#clues').replaceChildren(...L.clues.map(x=>{const li=document.createElement('li');li.textContent=x;return li}));board.className=`board ${L.scene}`;reset()}
 function reset(){const L=levels[levelIndex];board.replaceChildren(L.scene==='restaurant'?restaurant():L.scene==='school'?school():cinema());tray.replaceChildren(...shuffled(people).map(makePerson));status.textContent='';status.className='status';next.hidden=true}
-function bindDrag(p){p.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button!==0)return;const sx=e.clientX,sy=e.clientY,home=p.parentElement,sib=p.nextSibling;let drag=false;function move(e){const dx=e.clientX-sx,dy=e.clientY-sy;if(!drag){if(Math.hypot(dx,dy)<9)return;if(Math.abs(dx)>Math.abs(dy))return clean();drag=true;p.setPointerCapture(e.pointerId);p.classList.add('dragging')}e.preventDefault();p.style.left=e.clientX+'px';p.style.top=e.clientY+'px'}function end(e){if(!drag)return clean();p.classList.remove('dragging');p.style.left=p.style.top='';const u=document.elementFromPoint(e.clientX,e.clientY),s=u?.closest('.seat'),sol=levels[levelIndex].solution;if(s){const i=+s.dataset.seat;if(sol[i]!==p.dataset.id){home.insertBefore(p,sib);status.textContent='Dieser Platz passt nicht zu den Hinweisen.';status.className='status bad';navigator.vibrate?.(40)}else{s.appendChild(p);status.textContent='Richtig platziert!';status.className='status good';complete()}}else home.insertBefore(p,sib);clean()}function cancel(){if(drag){p.classList.remove('dragging');p.style.left=p.style.top='';home.insertBefore(p,sib)}clean()}function clean(){p.removeEventListener('pointermove',move);p.removeEventListener('pointerup',end);p.removeEventListener('pointercancel',cancel)}p.addEventListener('pointermove',move,{passive:false});p.addEventListener('pointerup',end);p.addEventListener('pointercancel',cancel)})}
+function bindDrag(p){
+  p.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='mouse'&&e.button!==0)return;
+    const sx=e.clientX,sy=e.clientY,home=p.parentElement,sib=p.nextSibling;
+    let drag=false,lastX=sx,lastY=sy;
+    const DRAG_Y_OFFSET=68;
+    function setDragPosition(x,y){p.style.left=x+'px';p.style.top=(y-DRAG_Y_OFFSET)+'px'}
+    function move(e){
+      lastX=e.clientX;lastY=e.clientY;
+      const dx=e.clientX-sx,dy=e.clientY-sy;
+      if(!drag){
+        if(Math.hypot(dx,dy)<9)return;
+        if(Math.abs(dx)>Math.abs(dy))return clean();
+        drag=true;p.setPointerCapture(e.pointerId);p.classList.add('dragging');setDragPosition(e.clientX,e.clientY)
+      }
+      e.preventDefault();setDragPosition(e.clientX,e.clientY)
+    }
+    function end(e){
+      if(!drag)return clean();
+      p.classList.remove('dragging');p.style.left=p.style.top='';
+      // Die sichtbare Figur schwebt oberhalb des Fingers. Deshalb wird auch dort der Zielplatz ermittelt.
+      const u=document.elementFromPoint(e.clientX,e.clientY-DRAG_Y_OFFSET),s=u?.closest('.seat'),sol=levels[levelIndex].solution;
+      if(s){
+        const i=+s.dataset.seat;
+        if(sol[i]!==p.dataset.id){home.insertBefore(p,sib);status.textContent='Dieser Platz passt nicht zu den Hinweisen.';status.className='status bad';navigator.vibrate?.(40)}
+        else{s.appendChild(p);status.textContent='Richtig platziert!';status.className='status good';complete()}
+      }else home.insertBefore(p,sib);
+      clean()
+    }
+    function cancel(){if(drag){p.classList.remove('dragging');p.style.left=p.style.top='';home.insertBefore(p,sib)}clean()}
+    function clean(){p.removeEventListener('pointermove',move);p.removeEventListener('pointerup',end);p.removeEventListener('pointercancel',cancel)}
+    p.addEventListener('pointermove',move,{passive:false});p.addEventListener('pointerup',end);p.addEventListener('pointercancel',cancel)
+  })
+}
 function complete(){const sol=levels[levelIndex].solution,seats=[...board.querySelectorAll('.seat')];if(seats.every((s,i)=>s.querySelector('.person')?.dataset.id===sol[i])){status.textContent=`Level ${levelIndex+1} geschafft! 🎉`;status.className='status good';if(levelIndex<levels.length-1){next.hidden=false;localStorage.setItem('platzspiel-level',String(levelIndex+1))}else{status.textContent='Alle drei Testlevel geschafft! 🎉'}navigator.vibrate?.([50,40,80])}}
 document.querySelector('#reset').onclick=reset;next.onclick=()=>{if(levelIndex<levels.length-1){levelIndex++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}};
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=0.4.3',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));renderLevel();
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=0.4.4',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));renderLevel();
