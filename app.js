@@ -21,24 +21,36 @@ function bindDrag(p){
   p.addEventListener('pointerdown',e=>{
     if(e.pointerType==='mouse'&&e.button!==0)return;
     const sx=e.clientX,sy=e.clientY,home=p.parentElement,sib=p.nextSibling;
-    let drag=false,lastX=sx,lastY=sy;
-    const DRAG_Y_OFFSET=68;
+    let drag=false,lastX=sx,lastY=sy,longPressTimer=null;
+    const DRAG_Y_OFFSET=68,LONG_PRESS_MS=280;
     function setDragPosition(x,y){p.style.left=x+'px';p.style.top=(y-DRAG_Y_OFFSET)+'px'}
-    function move(e){
-      lastX=e.clientX;lastY=e.clientY;
-      const dx=e.clientX-sx,dy=e.clientY-sy;
+    function startDrag(x,y){
+      if(drag)return;
+      drag=true;
+      clearTimeout(longPressTimer);
+      try{p.setPointerCapture(e.pointerId)}catch(_){}
+      p.classList.remove('longpress-ready');
+      p.classList.add('dragging');
+      setDragPosition(x,y);
+      navigator.vibrate?.(20)
+    }
+    // Hält man eine Figur kurz fest, wird sie automatisch oberhalb des Fingers angehoben.
+    longPressTimer=setTimeout(()=>startDrag(lastX,lastY),LONG_PRESS_MS);
+    function move(ev){
+      lastX=ev.clientX;lastY=ev.clientY;
+      const dx=ev.clientX-sx,dy=ev.clientY-sy;
       if(!drag){
         if(Math.hypot(dx,dy)<9)return;
-        if(Math.abs(dx)>Math.abs(dy))return clean();
-        drag=true;p.setPointerCapture(e.pointerId);p.classList.add('dragging');setDragPosition(e.clientX,e.clientY)
+        if(Math.abs(dx)>Math.abs(dy)){clearTimeout(longPressTimer);return clean()}
+        startDrag(ev.clientX,ev.clientY)
       }
-      e.preventDefault();setDragPosition(e.clientX,e.clientY)
+      ev.preventDefault();setDragPosition(ev.clientX,ev.clientY)
     }
-    function end(e){
+    function end(ev){
+      clearTimeout(longPressTimer);p.classList.remove('longpress-ready');
       if(!drag)return clean();
       p.classList.remove('dragging');p.style.left=p.style.top='';
-      // Die sichtbare Figur schwebt oberhalb des Fingers. Deshalb wird auch dort der Zielplatz ermittelt.
-      const u=document.elementFromPoint(e.clientX,e.clientY-DRAG_Y_OFFSET),s=u?.closest('.seat'),sol=levels[levelIndex].solution;
+      const u=document.elementFromPoint(ev.clientX,ev.clientY-DRAG_Y_OFFSET),s=u?.closest('.seat'),sol=levels[levelIndex].solution;
       if(s){
         const i=+s.dataset.seat;
         if(sol[i]!==p.dataset.id){home.insertBefore(p,sib);status.textContent='Dieser Platz passt nicht zu den Hinweisen.';status.className='status bad';navigator.vibrate?.(40)}
@@ -46,11 +58,11 @@ function bindDrag(p){
       }else home.insertBefore(p,sib);
       clean()
     }
-    function cancel(){if(drag){p.classList.remove('dragging');p.style.left=p.style.top='';home.insertBefore(p,sib)}clean()}
-    function clean(){p.removeEventListener('pointermove',move);p.removeEventListener('pointerup',end);p.removeEventListener('pointercancel',cancel)}
+    function cancel(){clearTimeout(longPressTimer);p.classList.remove('longpress-ready');if(drag){p.classList.remove('dragging');p.style.left=p.style.top='';home.insertBefore(p,sib)}clean()}
+    function clean(){clearTimeout(longPressTimer);p.removeEventListener('pointermove',move);p.removeEventListener('pointerup',end);p.removeEventListener('pointercancel',cancel)}
     p.addEventListener('pointermove',move,{passive:false});p.addEventListener('pointerup',end);p.addEventListener('pointercancel',cancel)
   })
 }
 function complete(){const sol=levels[levelIndex].solution,seats=[...board.querySelectorAll('.seat')];if(seats.every((s,i)=>s.querySelector('.person')?.dataset.id===sol[i])){status.textContent=`Level ${levelIndex+1} geschafft! 🎉`;status.className='status good';if(levelIndex<levels.length-1){next.hidden=false;localStorage.setItem('platzspiel-level',String(levelIndex+1))}else{status.textContent='Alle drei Testlevel geschafft! 🎉'}navigator.vibrate?.([50,40,80])}}
 document.querySelector('#reset').onclick=reset;next.onclick=()=>{if(levelIndex<levels.length-1){levelIndex++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}};
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=0.4.4',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));renderLevel();
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=0.4.5',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));renderLevel();
