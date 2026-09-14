@@ -1,68 +1,24 @@
-const people=[['a','👩🏻'],['b','👨🏽'],['c','👩🏿'],['d','👨🏻'],['e','👩🏼'],['f','👨🏾']];
+const people=[["a","👩🏻"],["b","👨🏽"],["c","👩🏿"],["d","👨🏻"],["e","👩🏼"],["f","👨🏾"]];
 const levels=[
-{name:'LEVEL 1 · RESTAURANT',scene:'restaurant',intro:'Ein kleiner Abend im Restaurant. Finde für alle Gäste den richtigen Platz.',solution:['c','a','e','b','d','f'],clues:['👩🏿 sitzt an Tisch 1 auf Platz 1.','👩🏻 sitzt 👩🏿 gegenüber.','👩🏼 sitzt an Tisch 2 auf Platz 3.','👨🏽 sitzt 👩🏼 gegenüber.','👨🏻 sitzt an Tisch 3 auf Platz 5 und 👨🏾 gegenüber.']},
-{name:'LEVEL 2 · SCHULE',scene:'school',intro:'Unterrichtsbeginn! Setze alle Schülerinnen und Schüler an den richtigen Tisch.',solution:['b','e','d','c','a','f'],clues:['👨🏽 sitzt vorne links an Platz 1.','👩🏼 sitzt vorne rechts an Platz 2.','👨🏻 sitzt in der Mitte links an Platz 3.','👩🏿 sitzt direkt rechts neben 👨🏻.','👩🏻 sitzt hinten links und 👨🏾 hinten rechts.']},
-{name:'LEVEL 3 · KINO',scene:'cinema',intro:'Der Film beginnt gleich. Finde die sechs reservierten Kinositze.',solution:['e','c','a','f','b','d'],clues:['👩🏼 sitzt in Reihe 1 ganz links.','👩🏿 sitzt in Reihe 1 neben 👩🏼.','👩🏻 sitzt in Reihe 1 ganz rechts.','👨🏾 sitzt in Reihe 2 ganz links.','👨🏽 sitzt in Reihe 2 in der Mitte und 👨🏻 rechts daneben.']}
+{name:'LEVEL 1 · RESTAURANT',short:'Restaurant',icon:'🍽️',scene:'restaurant',intro:'Ein kleiner Abend im Restaurant. Finde für alle Gäste den richtigen Platz.',solution:['c','a','e','b','d','f'],clues:['👩🏿 sitzt an Tisch 1 auf Platz 1.','👩🏻 sitzt 👩🏿 gegenüber.','👩🏼 sitzt an Tisch 2 auf Platz 3.','👨🏽 sitzt 👩🏼 gegenüber.','👨🏻 sitzt an Tisch 3 auf Platz 5 und 👨🏾 gegenüber.']},
+{name:'LEVEL 2 · SCHULE',short:'Schule',icon:'🏫',scene:'school',intro:'Unterrichtsbeginn! Setze alle an den richtigen Tisch.',solution:['b','e','d','c','a','f'],clues:['👨🏽 sitzt vorne links an Platz 1.','👩🏼 sitzt vorne rechts an Platz 2.','👨🏻 sitzt in der Mitte links an Platz 3.','👩🏿 sitzt direkt rechts neben 👨🏻.','👩🏻 sitzt hinten links und 👨🏾 hinten rechts.']},
+{name:'LEVEL 3 · KINO',short:'Kino',icon:'🎬',scene:'cinema',intro:'Der Film beginnt gleich. Finde die sechs reservierten Kinositze.',solution:['e','c','a','f','b','d'],clues:['👩🏼 sitzt in Reihe 1 ganz links.','👩🏿 sitzt in Reihe 1 neben 👩🏼.','👩🏻 sitzt in Reihe 1 ganz rechts.','👨🏾 sitzt in Reihe 2 ganz links.','👨🏽 sitzt in Reihe 2 in der Mitte und 👨🏻 rechts daneben.']},
+{name:'LEVEL 4 · RESTAURANT',short:'Restaurant',icon:'🕯️',scene:'restaurant',intro:'Heute ist viel los. Die Reservierungen sind diesmal anders verteilt.',solution:['f','d','a','c','b','e'],clues:['👨🏾 sitzt an Tisch 1 auf Platz 1.','👨🏻 sitzt 👨🏾 gegenüber.','👩🏻 sitzt an Tisch 2 auf Platz 3.','👩🏿 sitzt 👩🏻 gegenüber.','👨🏽 sitzt an Tisch 3 auf Platz 5 und 👩🏼 gegenüber.']},
+{name:'LEVEL 5 · SCHULE',short:'Schule',icon:'✏️',scene:'school',intro:'Neue Sitzordnung! Diesmal wechseln alle ihre Plätze.',solution:['a','f','c','b','e','d'],clues:['👩🏻 sitzt vorne links.','👨🏾 sitzt vorne rechts.','👩🏿 sitzt in der Mitte links.','👨🏽 sitzt direkt rechts neben 👩🏿.','👩🏼 sitzt hinten links und 👨🏻 hinten rechts.']},
+{name:'LEVEL 6 · KINO',short:'Kino',icon:'🍿',scene:'cinema',intro:'Noch eine Vorstellung – mit neuen reservierten Plätzen.',solution:['d','a','b','c','f','e'],clues:['👨🏻 sitzt in Reihe 1 ganz links.','👩🏻 sitzt in Reihe 1 in der Mitte.','👨🏽 sitzt rechts neben 👩🏻.','👩🏿 sitzt in Reihe 2 ganz links.','👨🏾 sitzt in Reihe 2 in der Mitte und 👩🏼 ganz rechts.']}
 ];
-let levelIndex=Math.min(Number(localStorage.getItem('platzspiel-level')||0),levels.length-1);
-const board=document.querySelector('#board'),tray=document.querySelector('#tray'),status=document.querySelector('#status'),next=document.querySelector('#next');
+let unlocked=Math.min(Number(localStorage.getItem('platzspiel-level')||0),levels.length-1);let levelIndex=unlocked;
+const board=document.querySelector('#board'),tray=document.querySelector('#tray'),status=document.querySelector('#status'),next=document.querySelector('#next'),gameView=document.querySelector('#gameView'),levelSelect=document.querySelector('#levelSelect'),levelGrid=document.querySelector('#levelGrid');
 function seat(i,label=''){const s=document.createElement('div');s.className='seat';s.dataset.seat=i;s.innerHTML=`<span class="seat-num">${label||i+1}</span>`;return s}
-function restaurant(){const room=document.createElement('div');room.className='restaurant-room';room.innerHTML='<div class="scene-badge">RESTAURANT</div><div class="restaurant-wall-art">🍷</div><div class="window"><i></i><i></i><span>☾</span></div><div class="plant">🪴</div><div class="pendant p1">●</div><div class="pendant p2">●</div>';
-[[0,1],[2,3],[4,5]].forEach((pair,n)=>{const g=document.createElement('div');g.className='table-group';g.append(seat(pair[0]));const t=document.createElement('div');t.className='restaurant-table';t.innerHTML=`<span>🍽️</span><b>Tisch ${n+1}</b>`;g.append(t,seat(pair[1]));room.append(g)});return room}
-function school(){const room=document.createElement('div');room.className='school-room';room.innerHTML='<div class="scene-badge">KLASSENZIMMER</div><div class="school-window"><span>☁️</span></div><div class="clock">◷</div><div class="blackboard"><span>PLATZSPIEL</span><small>ABC · 1+1=2</small></div><div class="teacher-desk">📚 &nbsp; Lehrerpult &nbsp; ✏️</div>';
-[[0,1],[2,3],[4,5]].forEach((pair,n)=>{const desk=document.createElement('div');desk.className='school-desk';desk.innerHTML=`<div class="desk-top">Tisch ${n+1}<span>✏️</span></div>`;desk.append(seat(pair[0]),seat(pair[1]));room.append(desk)});return room}
-function cinema(){const room=document.createElement('div');room.className='cinema-room';room.innerHTML='<div class="scene-badge">KINOSAAL</div><div class="curtain left"></div><div class="curtain right"></div><div class="screen"><span>PLATZSPIEL</span><small>🎬 DER FILM BEGINNT</small></div><div class="aisle-glow"></div><div class="floor-lights">• &nbsp; • &nbsp; • &nbsp; • &nbsp; •</div>';
-[[0,1,2],[3,4,5]].forEach((row,r)=>{const rr=document.createElement('div');rr.className='cinema-row';const lab=document.createElement('b');lab.textContent=`REIHE ${r+1}`;rr.append(lab);row.forEach(i=>rr.append(seat(i)));room.append(rr)});return room}
-function makePerson([id,face]){const p=document.createElement('div');p.className='person';p.dataset.id=id;p.textContent=face;bindDrag(p);return p}
-function shuffled(a){return [...a].sort(()=>Math.random()-.5)}
+function restaurant(){const room=document.createElement('div');room.className='restaurant-room';room.innerHTML='<div class="scene-badge">RESTAURANT</div><div class="restaurant-wall-art">🍷</div><div class="window"><i></i><i></i><span>☾</span></div><div class="plant">🪴</div><div class="pendant p1">●</div><div class="pendant p2">●</div>';[[0,1],[2,3],[4,5]].forEach((pair,n)=>{const g=document.createElement('div');g.className='table-group';g.append(seat(pair[0]));const t=document.createElement('div');t.className='restaurant-table';t.innerHTML=`<span>🍽️</span><b>Tisch ${n+1}</b>`;g.append(t,seat(pair[1]));room.append(g)});return room}
+function school(){const room=document.createElement('div');room.className='school-room';room.innerHTML='<div class="scene-badge">KLASSENZIMMER</div><div class="school-window"><span>☁️</span></div><div class="clock">◷</div><div class="blackboard"><span>PLATZSPIEL</span><small>ABC · 1+1=2</small></div><div class="teacher-desk">📚 &nbsp; Lehrerpult &nbsp; ✏️</div>';[[0,1],[2,3],[4,5]].forEach((pair,n)=>{const desk=document.createElement('div');desk.className='school-desk';desk.innerHTML=`<div class="desk-top">Tisch ${n+1}<span>✏️</span></div>`;desk.append(seat(pair[0]),seat(pair[1]));room.append(desk)});return room}
+function cinema(){const room=document.createElement('div');room.className='cinema-room';room.innerHTML='<div class="scene-badge">KINOSAAL</div><div class="curtain left"></div><div class="curtain right"></div><div class="screen"><span>PLATZSPIEL</span><small>🎬 DER FILM BEGINNT</small></div><div class="aisle-glow"></div><div class="floor-lights">• &nbsp; • &nbsp; • &nbsp; • &nbsp; •</div>';[[0,1,2],[3,4,5]].forEach((row,r)=>{const rr=document.createElement('div');rr.className='cinema-row';const lab=document.createElement('b');lab.textContent=`REIHE ${r+1}`;rr.append(lab);row.forEach(i=>rr.append(seat(i)));room.append(rr)});return room}
+function makePerson([id,face]){const p=document.createElement('div');p.className='person';p.dataset.id=id;p.textContent=face;bindDrag(p);return p}function shuffled(a){return [...a].sort(()=>Math.random()-.5)}
 function renderLevel(){const L=levels[levelIndex];document.querySelector('#sceneLabel').textContent=L.name;document.querySelector('#intro').textContent=L.intro;document.querySelector('#clues').replaceChildren(...L.clues.map(x=>{const li=document.createElement('li');li.textContent=x;return li}));board.className=`board ${L.scene}`;reset()}
 function reset(){const L=levels[levelIndex];board.replaceChildren(L.scene==='restaurant'?restaurant():L.scene==='school'?school():cinema());tray.replaceChildren(...shuffled(people).map(makePerson));status.textContent='';status.className='status';next.hidden=true}
-function bindDrag(p){
-  p.addEventListener('pointerdown',e=>{
-    if(e.pointerType==='mouse'&&e.button!==0)return;
-    const sx=e.clientX,sy=e.clientY,home=p.parentElement,sib=p.nextSibling;
-    let drag=false,lastX=sx,lastY=sy,longPressTimer=null;
-    const DRAG_Y_OFFSET=68,LONG_PRESS_MS=150;
-    function setDragPosition(x,y){p.style.left=x+'px';p.style.top=(y-DRAG_Y_OFFSET)+'px'}
-    function startDrag(x,y){
-      if(drag)return;
-      drag=true;
-      clearTimeout(longPressTimer);
-      try{p.setPointerCapture(e.pointerId)}catch(_){}
-      p.classList.remove('longpress-ready');
-      p.classList.add('dragging');
-      setDragPosition(x,y);
-      navigator.vibrate?.(20)
-    }
-    // Hält man eine Figur kurz fest, wird sie automatisch oberhalb des Fingers angehoben.
-    longPressTimer=setTimeout(()=>startDrag(lastX,lastY),LONG_PRESS_MS);
-    function move(ev){
-      lastX=ev.clientX;lastY=ev.clientY;
-      const dx=ev.clientX-sx,dy=ev.clientY-sy;
-      if(!drag){
-        if(Math.hypot(dx,dy)<9)return;
-        if(Math.abs(dx)>Math.abs(dy)){clearTimeout(longPressTimer);return clean()}
-        startDrag(ev.clientX,ev.clientY)
-      }
-      ev.preventDefault();setDragPosition(ev.clientX,ev.clientY)
-    }
-    function end(ev){
-      clearTimeout(longPressTimer);p.classList.remove('longpress-ready');
-      if(!drag)return clean();
-      p.classList.remove('dragging');p.style.left=p.style.top='';
-      const u=document.elementFromPoint(ev.clientX,ev.clientY-DRAG_Y_OFFSET),s=u?.closest('.seat'),sol=levels[levelIndex].solution;
-      if(s){
-        const i=+s.dataset.seat;
-        if(sol[i]!==p.dataset.id){home.insertBefore(p,sib);status.textContent='Dieser Platz passt nicht zu den Hinweisen.';status.className='status bad';navigator.vibrate?.(40)}
-        else{s.appendChild(p);status.textContent='Richtig platziert!';status.className='status good';complete()}
-      }else home.insertBefore(p,sib);
-      clean()
-    }
-    function cancel(){clearTimeout(longPressTimer);p.classList.remove('longpress-ready');if(drag){p.classList.remove('dragging');p.style.left=p.style.top='';home.insertBefore(p,sib)}clean()}
-    function clean(){clearTimeout(longPressTimer);p.removeEventListener('pointermove',move);p.removeEventListener('pointerup',end);p.removeEventListener('pointercancel',cancel)}
-    p.addEventListener('pointermove',move,{passive:false});p.addEventListener('pointerup',end);p.addEventListener('pointercancel',cancel)
-  })
-}
-function complete(){const sol=levels[levelIndex].solution,seats=[...board.querySelectorAll('.seat')];if(seats.every((s,i)=>s.querySelector('.person')?.dataset.id===sol[i])){status.textContent=`Level ${levelIndex+1} geschafft! 🎉`;status.className='status good';if(levelIndex<levels.length-1){next.hidden=false;localStorage.setItem('platzspiel-level',String(levelIndex+1))}else{status.textContent='Alle drei Testlevel geschafft! 🎉'}navigator.vibrate?.([50,40,80])}}
-document.querySelector('#reset').onclick=reset;next.onclick=()=>{if(levelIndex<levels.length-1){levelIndex++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}};
-if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=0.4.6',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));renderLevel();
+function bindDrag(p){p.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button!==0)return;const sx=e.clientX,sy=e.clientY,home=p.parentElement,sib=p.nextSibling;let drag=false,lastX=sx,lastY=sy,longPressTimer=null;const DRAG_Y_OFFSET=68,LONG_PRESS_MS=150;function setDragPosition(x,y){p.style.left=x+'px';p.style.top=(y-DRAG_Y_OFFSET)+'px'}function startDrag(x,y){if(drag)return;drag=true;clearTimeout(longPressTimer);try{p.setPointerCapture(e.pointerId)}catch(_){}p.classList.add('dragging');setDragPosition(x,y);navigator.vibrate?.(20)}longPressTimer=setTimeout(()=>startDrag(lastX,lastY),LONG_PRESS_MS);function move(ev){lastX=ev.clientX;lastY=ev.clientY;const dx=ev.clientX-sx,dy=ev.clientY-sy;if(!drag){if(Math.hypot(dx,dy)<9)return;if(Math.abs(dx)>Math.abs(dy)){clearTimeout(longPressTimer);return clean()}startDrag(ev.clientX,ev.clientY)}ev.preventDefault();setDragPosition(ev.clientX,ev.clientY)}function end(ev){clearTimeout(longPressTimer);if(!drag)return clean();p.classList.remove('dragging');p.style.left=p.style.top='';const u=document.elementFromPoint(ev.clientX,ev.clientY-DRAG_Y_OFFSET),s=u?.closest('.seat'),sol=levels[levelIndex].solution;if(s){const i=+s.dataset.seat;if(sol[i]!==p.dataset.id){home.insertBefore(p,sib);status.textContent='Dieser Platz passt nicht zu den Hinweisen.';status.className='status bad';navigator.vibrate?.(40)}else{s.appendChild(p);status.textContent='Richtig platziert!';status.className='status good';complete()}}else home.insertBefore(p,sib);clean()}function cancel(){clearTimeout(longPressTimer);if(drag){p.classList.remove('dragging');p.style.left=p.style.top='';home.insertBefore(p,sib)}clean()}function clean(){clearTimeout(longPressTimer);p.removeEventListener('pointermove',move);p.removeEventListener('pointerup',end);p.removeEventListener('pointercancel',cancel)}p.addEventListener('pointermove',move,{passive:false});p.addEventListener('pointerup',end);p.addEventListener('pointercancel',cancel)})}
+function complete(){const sol=levels[levelIndex].solution,seats=[...board.querySelectorAll('.seat')];if(seats.every((s,i)=>s.querySelector('.person')?.dataset.id===sol[i])){status.textContent=`Level ${levelIndex+1} geschafft! 🎉`;status.className='status good';if(levelIndex<levels.length-1){const newly=levelIndex+1;if(newly>unlocked){unlocked=newly;localStorage.setItem('platzspiel-level',String(unlocked))}next.hidden=false}else status.textContent='Alle sechs Level geschafft! 🎉';navigator.vibrate?.([50,40,80])}}
+function renderLevelGrid(){levelGrid.replaceChildren(...levels.map((L,i)=>{const b=document.createElement('button');const locked=i>unlocked;b.className='level-card'+(locked?' locked':'')+(i===levelIndex?' current':'');b.disabled=locked;b.innerHTML=`<span class="level-icon">${locked?'🔒':L.icon}</span><b>Level ${i+1}</b><small>${locked?'Noch gesperrt':L.short}</small>`;if(!locked)b.onclick=()=>{levelIndex=i;closeLevels();renderLevel();window.scrollTo({top:0})};return b}))}
+function openLevels(){renderLevelGrid();gameView.hidden=true;levelSelect.hidden=false;window.scrollTo({top:0})}function closeLevels(){levelSelect.hidden=true;gameView.hidden=false}
+document.querySelector('#reset').onclick=reset;document.querySelector('#openLevels').onclick=openLevels;document.querySelector('#closeLevels').onclick=closeLevels;next.onclick=()=>{if(levelIndex<levels.length-1){levelIndex++;renderLevel();window.scrollTo({top:0,behavior:'smooth'})}};
+if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js?v=0.5',{updateViaCache:'none'}).then(r=>r.update()).catch(()=>{}));renderLevel();
