@@ -2,3 +2,4 @@
 .clues{margin:0 0 20px;padding:14px 16px;border-radius:18px;background:#fffaf2;border:1px solid #ddd0bd}.clues h2{margin:0 0 8px}.clues ul{margin:0;padding-left:20px}.clues li{margin:6px 0;line-height:1.35;font-size:.92rem}
 
 .version{margin:.15rem 0 .65rem;font-size:.78rem;font-weight:700;opacity:.55;letter-spacing:.04em}
+.swipe-hint{display:flex;align-items:center;justify-content:center;gap:8px;margin:8px 0 0;color:#766d61;font-size:.76rem;font-weight:700;letter-spacing:.02em;user-select:none}.swipe-hint .arrow{font-size:1rem;line-height:1}.swipe-hint .track{width:42px;height:4px;border-radius:999px;background:#c9bba7;position:relative}.swipe-hint .track::after{content:"";position:absolute;width:14px;height:4px;border-radius:999px;background:#766d61;left:0;animation:swipeCue 1.5s ease-in-out infinite alternate}@keyframes swipeCue{to{transform:translateX(28px)}}@media(prefers-reduced-motion:reduce){.swipe-hint .track::after{animation:none;left:14px}}
