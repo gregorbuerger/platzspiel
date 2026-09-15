@@ -53,3 +53,17 @@ h2#peopleTitle{margin:10px 0 6px;font-size:.78rem}
 .school-room{min-height:350px;padding-top:92px;padding-bottom:10px}.blackboard{top:10px;height:61px}.teacher-desk{top:76px;height:25px}.school-desk{height:76px;margin:2px auto 5px}.desk-top{height:50px}
 .cinema-room{min-height:330px;padding-top:98px;padding-bottom:10px}.screen{top:13px;height:66px}.cinema-row{margin:14px auto 22px}.aisle-glow{top:86px}
 @media(max-width:370px){.clues ul{max-height:108px}header h1{font-size:1.42rem}.restaurant-room{min-height:306px}.school-room{min-height:336px}.cinema-room{min-height:316px}}
+
+/* v0.7.1: kompakter Spielscreen */
+.clues{height:126px;display:flex;flex-direction:column;overflow:hidden}
+.clues h2{flex:0 0 auto}
+.clues ul{flex:1 1 auto;min-height:0;max-height:none!important;overflow-y:scroll!important;touch-action:pan-y;-webkit-overflow-scrolling:touch;overscroll-behavior-y:contain;scrollbar-gutter:stable}
+.actions{margin-top:8px}
+#reset{display:none!important}
+#peopleTitle{margin-top:10px}
+.school-room{height:330px;min-height:330px;padding-top:84px;overflow:hidden}.blackboard{height:55px}.teacher-desk{top:69px}.school-desk{height:69px;margin:1px auto 3px}.desk-top{height:45px}
+.restaurant-room{height:304px;min-height:304px;overflow:hidden}.table-group{height:82px}
+.cinema-room{height:310px;min-height:310px;overflow:hidden}
+.completion-card{display:none;margin-top:8px;padding:12px 14px;border-radius:17px;background:linear-gradient(145deg,#fffdf7,#f1dfc4);border:2px solid #d9c2a3;text-align:center;box-shadow:0 6px 14px #6f4a2718}
+.completion-card.show{display:block}.completion-card b{display:block;font-size:1rem;margin-bottom:8px}.completion-card button{width:100%;border:0;border-radius:13px;padding:11px;background:#24211d;color:#fff;font:inherit;font-weight:800;box-shadow:0 4px 0 #0f0e0d}
+@media(max-width:370px){.clues{height:116px}.school-room{height:316px;min-height:316px}.restaurant-room{height:294px;min-height:294px}.cinema-room{height:298px;min-height:298px}}
