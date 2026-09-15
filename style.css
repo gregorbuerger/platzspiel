@@ -28,3 +28,28 @@ header{text-align:center}h1{font-size:2.55rem;letter-spacing:-.045em;text-shadow
 
 /* v0.5 – Levelauswahl und Fortschritt */
 .level-button{display:block;margin:0 auto 12px;border:0;border-radius:999px;padding:8px 13px;background:#2d2925;color:#fff;font-weight:850;font-size:.75rem;box-shadow:0 4px 0 #0f0e0d;cursor:pointer}.level-select{min-height:75svh}.level-select-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px;margin-bottom:20px}.level-select-head h1{margin-top:5px}.level-select-head p:last-child{color:#6f6255;margin:8px 0 0}.icon-btn{width:42px;height:42px;border:0;border-radius:50%;background:#e7d4ba;font-size:1.7rem;line-height:1;color:#493d32;box-shadow:0 4px 0 #c2a988}.level-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:13px}.level-card{min-height:138px;border:3px solid #fff4e4;border-radius:23px;background:linear-gradient(145deg,#fffdf8,#f2dfc4);box-shadow:0 7px 0 #c5a681,0 11px 18px #5a3a1d22;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;color:#332b24;font:inherit}.level-card.current{outline:4px solid #e0a64f;outline-offset:2px}.level-card.locked{filter:saturate(.35);opacity:.58;box-shadow:0 5px 0 #c7b9a8}.level-icon{font-size:2.25rem;filter:drop-shadow(0 4px 2px #0002)}.level-card b{font-size:1rem}.level-card small{font-size:.72rem;color:#77695b;font-weight:750}.level-card:not(.locked):active{transform:translateY(3px);box-shadow:0 4px 0 #c5a681}.level-select[hidden],#gameView[hidden]{display:none!important}
+
+/* v0.7 – kompakte Mobile-Spielansicht */
+main{padding-top:calc(8px + env(safe-area-inset-top));padding-left:12px;padding-right:12px}
+header{position:relative;display:grid;grid-template-columns:auto 1fr auto;grid-template-areas:"levels title version" "scene scene scene" "intro intro intro";align-items:center;gap:3px 8px;margin:0 0 8px;text-align:left}
+header .level-button{grid-area:levels;margin:0;padding:7px 10px;font-size:.68rem;box-shadow:0 3px 0 #0f0e0d}
+header h1{grid-area:title;margin:0;text-align:center;font-size:1.55rem;line-height:1;letter-spacing:-.04em;text-shadow:0 1px 0 #fff}
+header .version{grid-area:version;margin:0;font-size:.56rem;white-space:nowrap;opacity:.5}
+header .eyebrow{grid-area:scene;justify-self:center;margin:3px 0 0;padding:3px 9px;font-size:.58rem;letter-spacing:.13em}
+header>p:last-child{grid-area:intro;margin:2px 4px 0;text-align:center;font-size:.72rem;line-height:1.25;color:#655d54}
+.clues{margin:0 0 9px;padding:9px 12px 8px;border-radius:16px;box-shadow:0 4px 12px #6f4a2718}
+.clues h2{position:sticky;top:0;z-index:2;margin:0 0 4px;padding:0 0 3px;background:#fffaf2;font-size:.82rem}
+.clues ul{max-height:118px;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;padding-left:19px;padding-right:4px;scrollbar-width:thin}
+.clues li{margin:3px 0;font-size:.78rem;line-height:1.22}
+.board{border-radius:19px;box-shadow:0 7px 18px #3a2b1d18}
+h2#peopleTitle{margin:10px 0 6px;font-size:.78rem}
+.tray{min-height:70px;padding:7px;gap:8px;border-radius:17px}
+.person{flex-basis:54px;width:54px;height:54px;font-size:1.48rem}
+.swipe-hint{margin-top:4px;font-size:.65rem;gap:6px}
+.track{width:34px;height:3px}.track:after{height:3px;width:12px}@keyframes sw{to{transform:translateX(22px)}}
+.actions{margin-top:9px}.actions button{padding:11px;border-radius:13px;font-size:.82rem}.status{min-height:19px;margin:7px 0 0;font-size:.76rem}
+/* Szenen etwas dichter, ohne Sitzplätze zu verkleinern */
+.restaurant-room{min-height:320px;padding-top:40px;padding-bottom:8px}.table-group{height:88px}.restaurant-table{height:64px}.window{top:9px;height:43px}.plant{top:18px}
+.school-room{min-height:350px;padding-top:92px;padding-bottom:10px}.blackboard{top:10px;height:61px}.teacher-desk{top:76px;height:25px}.school-desk{height:76px;margin:2px auto 5px}.desk-top{height:50px}
+.cinema-room{min-height:330px;padding-top:98px;padding-bottom:10px}.screen{top:13px;height:66px}.cinema-row{margin:14px auto 22px}.aisle-glow{top:86px}
+@media(max-width:370px){.clues ul{max-height:108px}header h1{font-size:1.42rem}.restaurant-room{min-height:306px}.school-room{min-height:336px}.cinema-room{min-height:316px}}
