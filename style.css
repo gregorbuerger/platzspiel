@@ -102,3 +102,17 @@ h2#peopleTitle{margin:10px 0 6px;font-size:.78rem}
   .school-desk .seat:first-of-type{left:29%}
   .school-desk .seat:last-of-type{right:29%}
 }
+
+/* v0.7.8 - Schule nach Referenz: Tisch oben, zwei Plaetze mittig darunter */
+.school-desk{height:86px;width:88%;margin:0 auto 2px;display:block;position:relative;transform:none!important}
+.school-desk .desk-top{position:absolute;top:0;left:0;right:0;height:43px}
+.school-desk .seat{position:absolute;top:38px;width:50px;height:50px}
+.school-desk .seat:first-of-type{left:calc(50% - 82px)}
+.school-desk .seat:last-of-type{right:calc(50% - 82px)}
+@media(max-width:370px){
+ .school-desk{width:92%;height:84px}
+ .school-desk .desk-top{left:0;right:0;height:41px}
+ .school-desk .seat{top:36px;width:48px;height:48px}
+ .school-desk .seat:first-of-type{left:calc(50% - 76px)}
+ .school-desk .seat:last-of-type{right:calc(50% - 76px)}
+}
