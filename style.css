@@ -97,3 +97,17 @@ h2#peopleTitle{margin:10px 0 6px;font-size:.78rem}
   .school-desk .seat:first-of-type{left:18%}
   .school-desk .seat:last-of-type{right:18%}
 }
+
+/* v0.7.3 – Schule: Tafel -> Tisch -> Schueler (Gesichter zum Spieler) */
+.school-desk{height:79px}
+.school-desk .desk-top{top:0;bottom:auto;height:43px;z-index:2}
+.school-desk .seat{top:31px;z-index:3}
+.school-desk .seat:first-of-type{left:21%}
+.school-desk .seat:last-of-type{right:21%}
+@media(max-width:370px){
+  .school-desk{height:76px}
+  .school-desk .desk-top{top:0;bottom:auto;height:41px}
+  .school-desk .seat{top:29px}
+  .school-desk .seat:first-of-type{left:18%}
+  .school-desk .seat:last-of-type{right:18%}
+}
