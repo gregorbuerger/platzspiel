@@ -67,3 +67,33 @@ h2#peopleTitle{margin:10px 0 6px;font-size:.78rem}
 .completion-card{display:none;margin-top:8px;padding:12px 14px;border-radius:17px;background:linear-gradient(145deg,#fffdf7,#f1dfc4);border:2px solid #d9c2a3;text-align:center;box-shadow:0 6px 14px #6f4a2718}
 .completion-card.show{display:block}.completion-card b{display:block;font-size:1rem;margin-bottom:8px}.completion-card button{width:100%;border:0;border-radius:13px;padding:11px;background:#24211d;color:#fff;font:inherit;font-weight:800;box-shadow:0 4px 0 #0f0e0d}
 @media(max-width:370px){.clues{height:116px}.school-room{height:316px;min-height:316px}.restaurant-room{height:294px;min-height:294px}.cinema-room{height:298px;min-height:298px}}
+
+
+/* v0.7.2 – Schulplätze vollständig sichtbar + intuitive Hinweis-Scrollanzeige */
+.clues{position:relative;height:116px;padding-bottom:7px}
+.clue-scroll-wrap{position:relative;flex:1 1 auto;min-height:0;overflow:hidden}
+.clues ul{height:100%;padding-bottom:22px!important;scrollbar-color:#9b8468 #eadfce;scrollbar-width:thin}
+.clue-scroll-wrap:after{content:"";position:absolute;left:0;right:0;bottom:0;height:25px;pointer-events:none;background:linear-gradient(to bottom,#fffaf200,#fffaf2 78%)}
+.clue-scroll-hint{display:none;position:absolute;right:3px;bottom:1px;z-index:5;padding:2px 7px;border-radius:999px;background:#e7d4ba;color:#68594a;font-size:.56rem;font-weight:850;letter-spacing:.03em;box-shadow:0 1px 4px #0002;pointer-events:none;animation:clueBob 1.2s ease-in-out infinite alternate}
+.clue-scroll-hint.show{display:block}.clue-scroll-hint.scrolled{opacity:.72;animation:none}
+@keyframes clueBob{to{transform:translateY(2px)}}
+
+/* Im Klassenzimmer stehen die Stühle hinter den Tischen (zur Tafel hin). */
+.school-room{height:330px;min-height:330px;padding-top:80px;padding-bottom:7px;overflow:hidden}
+.blackboard{top:8px;height:53px}.teacher-desk{top:64px;height:23px}
+.school-desk{height:79px;width:88%;margin:0 auto 1px;display:block;position:relative;z-index:1;transform:none!important}
+.school-desk .desk-top{position:absolute;left:7%;right:7%;bottom:3px;height:43px;z-index:3}
+.school-desk .seat{position:absolute;top:0;width:50px;height:50px;z-index:2}
+.school-desk .seat:first-of-type{left:21%}
+.school-desk .seat:last-of-type{right:21%}
+.school-desk .seat::after{bottom:5px;height:6px}
+.school-desk .seat-num{top:3px;left:5px}
+
+@media(max-width:370px){
+  .clues{height:110px}
+  .school-room{height:320px;min-height:320px;padding-top:78px}
+  .school-desk{height:76px;width:92%}
+  .school-desk .seat{width:48px;height:48px}
+  .school-desk .seat:first-of-type{left:18%}
+  .school-desk .seat:last-of-type{right:18%}
+}
