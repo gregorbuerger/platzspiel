@@ -78,72 +78,27 @@ h2#peopleTitle{margin:10px 0 6px;font-size:.78rem}
 .clue-scroll-hint.show{display:block}.clue-scroll-hint.scrolled{opacity:.72;animation:none}
 @keyframes clueBob{to{transform:translateY(2px)}}
 
-/* Im Klassenzimmer stehen die Stühle hinter den Tischen (zur Tafel hin). */
-.school-room{height:330px;min-height:330px;padding-top:80px;padding-bottom:7px;overflow:hidden}
-.blackboard{top:8px;height:53px}.teacher-desk{top:64px;height:23px}
-.school-desk{height:79px;width:88%;margin:0 auto 1px;display:block;position:relative;z-index:1;transform:none!important}
-.school-desk .desk-top{position:absolute;left:7%;right:7%;bottom:3px;height:43px;z-index:3}
-.school-desk .seat{position:absolute;top:0;width:50px;height:50px;z-index:2}
-.school-desk .seat:first-of-type{left:21%}
-.school-desk .seat:last-of-type{right:21%}
+/* Klassenzimmer – eine eindeutige Geometrie: Lehrerin -> Pult -> Tisch -> Figuren */
+.school-room{height:414px;min-height:414px;padding-top:146px;padding-bottom:8px;overflow:hidden}
+.blackboard{top:8px;height:53px}
+.teacher{position:absolute;top:58px;left:50%;transform:translateX(-50%);z-index:4;width:52px;height:52px;display:flex;align-items:center;justify-content:center;font-size:2rem}
+.teacher span{filter:drop-shadow(0 3px 2px #0002)}
+.teacher-desk{top:103px;height:27px;z-index:3}
+.school-desk{height:86px;width:88%;margin:0 auto 2px;display:block;position:relative;z-index:1;transform:none!important}
+.school-desk .desk-top{position:absolute;top:0;left:7%;right:7%;height:43px;z-index:3}
+.school-desk .seat{position:absolute;top:36px;width:50px;height:50px;z-index:4}
+.school-desk .seat:first-of-type{left:31%}
+.school-desk .seat:last-of-type{right:31%}
 .school-desk .seat::after{bottom:5px;height:6px}
 .school-desk .seat-num{top:3px;left:5px}
-
 @media(max-width:370px){
   .clues{height:110px}
-  .school-room{height:320px;min-height:320px;padding-top:78px}
-  .school-desk{height:76px;width:92%}
-  .school-desk .seat{width:48px;height:48px}
-  .school-desk .seat:first-of-type{left:18%}
-  .school-desk .seat:last-of-type{right:18%}
+  .school-room{height:402px;min-height:402px;padding-top:142px}
+  .teacher{top:56px;width:48px;height:48px;font-size:1.85rem}
+  .teacher-desk{top:99px;height:26px}
+  .school-desk{height:84px;width:92%}
+  .school-desk .desk-top{height:41px}
+  .school-desk .seat{top:34px;width:48px;height:48px}
+  .school-desk .seat:first-of-type{left:29%}
+  .school-desk .seat:last-of-type{right:29%}
 }
-
-/* v0.7.3 – Schule: Tafel -> Tisch -> Schueler (Gesichter zum Spieler) */
-.school-desk{height:79px}
-.school-desk .desk-top{top:0;bottom:auto;height:43px;z-index:2}
-.school-desk .seat{top:31px;z-index:3}
-.school-desk .seat:first-of-type{left:21%}
-.school-desk .seat:last-of-type{right:21%}
-@media(max-width:370px){
-  .school-desk{height:76px}
-  .school-desk .desk-top{top:0;bottom:auto;height:41px}
-  .school-desk .seat{top:29px}
-  .school-desk .seat:first-of-type{left:18%}
-  .school-desk .seat:last-of-type{right:18%}
-}
-
-/* v0.7.4 – Schule: saubere Reihen wie Referenz: Lehrerpult -> Sitzplaetze -> Tisch */
-.school-room{height:350px;min-height:350px;padding-top:101px;padding-bottom:7px}
-.school-desk{height:80px;width:88%;margin:0 auto 1px;display:block;position:relative;transform:none!important}
-.school-desk .seat{top:0;width:50px;height:50px;z-index:3}
-.school-desk .seat:first-of-type{left:21%}
-.school-desk .seat:last-of-type{right:21%}
-.school-desk .desk-top{top:35px;bottom:auto;left:7%;right:7%;height:43px;z-index:2}
-@media(max-width:370px){
-  .school-room{height:340px;min-height:340px;padding-top:99px}
-  .school-desk{height:78px;width:92%}
-  .school-desk .seat{top:0;width:48px;height:48px}
-  .school-desk .seat:first-of-type{left:18%}
-  .school-desk .seat:last-of-type{right:18%}
-  .school-desk .desk-top{top:33px;height:41px}
-}
-
-/* v0.7.5 - Klassenzimmer: klare vertikale Reihenfolge Tafel -> Lehrerpult -> Sitze -> Tisch */
-.school-room{height:390px;min-height:390px;padding-top:128px;padding-bottom:8px}
-.teacher-desk{top:94px}
-.school-desk{height:84px;width:88%;margin:0 auto 2px;position:relative;display:block;transform:none!important}
-.school-desk .seat{position:absolute;top:0;width:50px;height:50px;z-index:3}
-.school-desk .seat:first-of-type{left:21%}
-.school-desk .seat:last-of-type{right:21%}
-.school-desk .desk-top{position:absolute;top:38px;bottom:auto;left:7%;right:7%;height:43px;z-index:2}
-@media(max-width:370px){.school-room{height:378px;min-height:378px;padding-top:125px}.teacher-desk{top:92px}.school-desk{height:81px;width:92%}.school-desk .seat{top:0;width:48px;height:48px}.school-desk .seat:first-of-type{left:18%}.school-desk .seat:last-of-type{right:18%}.school-desk .desk-top{top:36px;height:41px}}
-
-/* v0.7.6 - Schule exakt nach Referenz: Lehrerpult -> Tisch -> zwei Schueler darunter */
-.school-room{height:390px;min-height:390px;padding-top:126px;padding-bottom:8px}
-.teacher-desk{top:91px}
-.school-desk{height:84px;width:88%;margin:0 auto 2px;position:relative;display:block;transform:none!important}
-.school-desk .desk-top{position:absolute;top:0;bottom:auto;left:7%;right:7%;height:43px;z-index:3}
-.school-desk .seat{position:absolute;top:35px;width:50px;height:50px;z-index:4}
-.school-desk .seat:first-of-type{left:21%}
-.school-desk .seat:last-of-type{right:21%}
-@media(max-width:370px){.school-room{height:378px;min-height:378px;padding-top:123px}.teacher-desk{top:89px}.school-desk{height:81px;width:92%}.school-desk .desk-top{top:0;height:41px}.school-desk .seat{top:33px;width:48px;height:48px}.school-desk .seat:first-of-type{left:18%}.school-desk .seat:last-of-type{right:18%}}
