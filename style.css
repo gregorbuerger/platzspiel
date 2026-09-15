@@ -127,3 +127,13 @@ h2#peopleTitle{margin:10px 0 6px;font-size:.78rem}
   .school-desk .seat:last-of-type{right:18%}
   .school-desk .desk-top{top:33px;height:41px}
 }
+
+/* v0.7.5 - Klassenzimmer: klare vertikale Reihenfolge Tafel -> Lehrerpult -> Sitze -> Tisch */
+.school-room{height:390px;min-height:390px;padding-top:128px;padding-bottom:8px}
+.teacher-desk{top:94px}
+.school-desk{height:84px;width:88%;margin:0 auto 2px;position:relative;display:block;transform:none!important}
+.school-desk .seat{position:absolute;top:0;width:50px;height:50px;z-index:3}
+.school-desk .seat:first-of-type{left:21%}
+.school-desk .seat:last-of-type{right:21%}
+.school-desk .desk-top{position:absolute;top:38px;bottom:auto;left:7%;right:7%;height:43px;z-index:2}
+@media(max-width:370px){.school-room{height:378px;min-height:378px;padding-top:125px}.teacher-desk{top:92px}.school-desk{height:81px;width:92%}.school-desk .seat{top:0;width:48px;height:48px}.school-desk .seat:first-of-type{left:18%}.school-desk .seat:last-of-type{right:18%}.school-desk .desk-top{top:36px;height:41px}}
