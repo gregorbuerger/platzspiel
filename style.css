@@ -111,3 +111,19 @@ h2#peopleTitle{margin:10px 0 6px;font-size:.78rem}
   .school-desk .seat:first-of-type{left:18%}
   .school-desk .seat:last-of-type{right:18%}
 }
+
+/* v0.7.4 – Schule: saubere Reihen wie Referenz: Lehrerpult -> Sitzplaetze -> Tisch */
+.school-room{height:350px;min-height:350px;padding-top:101px;padding-bottom:7px}
+.school-desk{height:80px;width:88%;margin:0 auto 1px;display:block;position:relative;transform:none!important}
+.school-desk .seat{top:0;width:50px;height:50px;z-index:3}
+.school-desk .seat:first-of-type{left:21%}
+.school-desk .seat:last-of-type{right:21%}
+.school-desk .desk-top{top:35px;bottom:auto;left:7%;right:7%;height:43px;z-index:2}
+@media(max-width:370px){
+  .school-room{height:340px;min-height:340px;padding-top:99px}
+  .school-desk{height:78px;width:92%}
+  .school-desk .seat{top:0;width:48px;height:48px}
+  .school-desk .seat:first-of-type{left:18%}
+  .school-desk .seat:last-of-type{right:18%}
+  .school-desk .desk-top{top:33px;height:41px}
+}
