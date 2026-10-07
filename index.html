@@ -1,0 +1,219 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+  <meta name="theme-color" content="#f3eee7" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="Seat Logic" />
+  <link rel="manifest" href="manifest.webmanifest" />
+  <title>Seat Logic – Level 1</title>
+  <style>
+    :root{
+      --bg:#f3eee7;
+      --panel:#fffaf4;
+      --ink:#292626;
+      --muted:#7a7370;
+      --accent:#ff6f61;
+      --accent2:#ffbf69;
+      --seat:#a72632;
+      --seat-dark:#781a23;
+      --ok:#2f9e69;
+      --shadow:0 14px 40px rgba(52,36,24,.12);
+    }
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;min-height:100%;background:linear-gradient(180deg,#faf6f0 0%,var(--bg) 100%);font-family:Inter,ui-rounded,"SF Pro Rounded","SF Pro Display",system-ui,-apple-system,sans-serif;color:var(--ink)}
+    body{min-height:100svh;overscroll-behavior:none}
+    button{font:inherit}
+    .app{width:min(100%,560px);min-height:100svh;margin:0 auto;padding:max(14px,env(safe-area-inset-top)) 14px max(20px,env(safe-area-inset-bottom));display:flex;flex-direction:column;gap:14px}
+    header{display:flex;align-items:center;justify-content:space-between;padding:2px 4px}
+    .brand{font-weight:900;font-size:18px;letter-spacing:-.03em}
+    .level{font-size:13px;font-weight:800;background:#fff;padding:8px 12px;border-radius:999px;box-shadow:0 6px 18px rgba(45,35,29,.08)}
+    .scene{position:relative;background:linear-gradient(180deg,#211d29 0%,#3b2a36 38%,#6e3c3e 39%,#4a2f2b 100%);border-radius:28px;box-shadow:var(--shadow);padding:18px 12px 16px;overflow:hidden;min-height:300px}
+    .screen{height:78px;margin:2px 16px 18px;border-radius:16px;background:linear-gradient(180deg,#e7f2ff,#b8d3f5);box-shadow:inset 0 0 0 4px rgba(255,255,255,.26),0 9px 22px rgba(0,0,0,.18);display:flex;align-items:center;justify-content:center;color:#59728f;font-size:12px;font-weight:900;letter-spacing:.14em;text-transform:uppercase}
+    .seats{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;align-items:end;padding:0 2px 8px}
+    .seat{position:relative;height:112px;border-radius:18px 18px 10px 10px;background:linear-gradient(180deg,#c63d4a 0 64%,#8a202b 65% 100%);box-shadow:inset 0 -8px 0 rgba(0,0,0,.12),0 7px 0 var(--seat-dark);display:flex;align-items:flex-start;justify-content:center;padding-top:6px;transition:.18s transform,.18s filter,.18s box-shadow}
+    .seat::before,.seat::after{content:"";position:absolute;bottom:12px;width:10px;height:40px;background:#6c1d25;border-radius:8px}
+    .seat::before{left:-4px}.seat::after{right:-4px}
+    .seat.drop-target{transform:translateY(-6px);filter:brightness(1.12);box-shadow:0 0 0 3px rgba(255,191,105,.65),inset 0 -8px 0 rgba(0,0,0,.12),0 7px 0 var(--seat-dark)}
+    .seat-label{position:absolute;bottom:-3px;left:50%;transform:translateX(-50%);font-size:10px;color:rgba(255,255,255,.75);font-weight:800}
+    .placed{width:52px;height:78px;display:flex;align-items:flex-end;justify-content:center}
+    .panel{background:var(--panel);border-radius:26px;padding:14px;box-shadow:var(--shadow)}
+    .section-title{display:flex;align-items:center;justify-content:space-between;margin:0 2px 10px}
+    .section-title h2{margin:0;font-size:15px;letter-spacing:-.02em}
+    .section-title span{font-size:12px;color:var(--muted);font-weight:700}
+    .characters{display:grid;grid-template-columns:repeat(6,1fr);gap:8px;min-height:98px}
+    .char{position:relative;touch-action:none;user-select:none;cursor:grab;border:0;background:transparent;padding:0;display:flex;flex-direction:column;align-items:center;gap:4px;transition:.16s transform,.16s opacity}
+    .char:active{cursor:grabbing}.char.dragging{opacity:.2}.char.hidden-home{visibility:hidden}
+    .char-name{font-size:10px;font-weight:900;color:#554e4b;line-height:1}
+    .avatar{--skin:#f0c3a0;--hair:#5a392c;--shirt:#5d8bd9;position:relative;width:48px;height:72px;filter:drop-shadow(0 6px 5px rgba(48,35,26,.14))}
+    .head{position:absolute;top:1px;left:10px;width:29px;height:31px;border-radius:48% 48% 46% 46%;background:var(--skin);z-index:3}
+    .hair{position:absolute;top:-2px;left:8px;width:33px;height:18px;background:var(--hair);border-radius:18px 18px 8px 8px;z-index:4}
+    .hair::after{content:"";position:absolute;right:-1px;top:8px;width:8px;height:18px;background:var(--hair);border-radius:0 8px 9px 5px}
+    .eyes{position:absolute;top:13px;left:6px;width:18px;height:4px;z-index:5}
+    .eyes::before,.eyes::after{content:"";position:absolute;width:3px;height:3px;background:#3a2d29;border-radius:50%;top:0}.eyes::before{left:2px}.eyes::after{right:2px}
+    .body{position:absolute;left:7px;top:29px;width:35px;height:34px;border-radius:13px 13px 10px 10px;background:var(--shirt);z-index:2}
+    .legs{position:absolute;left:13px;top:59px;width:24px;height:13px;border-radius:0 0 7px 7px;background:#3e4b64;z-index:1}
+    .glasses{position:absolute;top:11px;left:4px;width:21px;height:8px;z-index:6}
+    .glasses::before,.glasses::after{content:"";position:absolute;top:0;width:7px;height:6px;border:1.8px solid #332c2b;border-radius:50%}.glasses::before{left:0}.glasses::after{right:0}.glasses span{position:absolute;left:8px;top:3px;width:5px;height:1.5px;background:#332c2b}
+    .cap{position:absolute;top:-5px;left:7px;width:35px;height:14px;background:#3674c8;border-radius:16px 16px 5px 5px;z-index:7}.cap::after{content:"";position:absolute;right:-7px;bottom:-1px;width:15px;height:5px;background:#2d61ab;border-radius:0 8px 8px 0}
+    .char.mia .avatar{--hair:#e6c36b;--shirt:#e97ba0}.char.leo .avatar{--hair:#3c2d27;--shirt:#4f9d67}.char.emma .avatar{--hair:#b84835;--shirt:#7b6bc7}.char.noah .avatar{--hair:#6a442c;--shirt:#4d87d9}.char.lina .avatar{--hair:#201d21;--shirt:#e6b94f}.char.ben .avatar{--hair:#d9b267;--shirt:#d8514d}
+    .clues{display:grid;grid-template-columns:1fr 1fr;gap:9px}
+    .clue{background:#fff;border:1px solid #eee4d9;border-radius:18px;padding:11px 10px;min-height:72px;display:flex;align-items:center;justify-content:center;text-align:center;font-size:12px;font-weight:850;line-height:1.25;box-shadow:0 5px 16px rgba(54,40,31,.055)}
+    .clue b{color:#9b3e42}
+    .actions{display:grid;grid-template-columns:1fr 1.45fr;gap:10px}
+    .btn{border:0;border-radius:18px;padding:15px 14px;font-weight:900;font-size:15px;box-shadow:0 8px 20px rgba(53,40,31,.08)}
+    .btn.secondary{background:#fff;color:#554e4b}.btn.primary{background:linear-gradient(180deg,#ff7b6f,#f05c51);color:white}
+    .btn:active{transform:translateY(1px)}
+    .message{min-height:24px;text-align:center;font-size:13px;font-weight:800;color:var(--muted)}
+    .message.error{color:#b44444}.message.ok{color:var(--ok)}
+    .drag-ghost{position:fixed;z-index:1000;pointer-events:none;transform:translate(-50%,-72%);filter:drop-shadow(0 12px 12px rgba(0,0,0,.25));scale:1.12}
+    .win{position:fixed;inset:0;z-index:2000;background:rgba(34,25,26,.52);backdrop-filter:blur(6px);display:none;align-items:center;justify-content:center;padding:24px}
+    .win.show{display:flex}
+    .win-card{width:min(100%,360px);background:#fffaf4;border-radius:30px;padding:26px;text-align:center;box-shadow:0 25px 80px rgba(0,0,0,.24);animation:pop .32s ease-out}
+    .win-emoji{font-size:54px}.win h1{margin:8px 0 6px;font-size:28px}.win p{margin:0 0 18px;color:var(--muted);font-weight:700}
+    @keyframes pop{from{transform:scale(.82);opacity:0}to{transform:scale(1);opacity:1}}
+    @media(max-width:390px){.app{padding-left:10px;padding-right:10px}.scene{padding-left:8px;padding-right:8px}.seats{gap:4px}.seat{height:102px}.avatar{transform:scale(.92)}.characters{gap:3px}.char-name{font-size:9px}.clue{font-size:11px}}
+  </style>
+</head>
+<body>
+  <main class="app">
+    <header>
+      <div class="brand">Seat Logic</div>
+      <div class="level">Level 1 · Kino</div>
+    </header>
+
+    <section class="scene" aria-label="Kinosaal">
+      <div class="screen">Heute im Kino</div>
+      <div class="seats" id="seats"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title"><h2>Ziehe die Personen auf die Sitze</h2><span>6 Personen</span></div>
+      <div class="characters" id="characters"></div>
+    </section>
+
+    <section class="panel">
+      <div class="section-title"><h2>Hinweise</h2><span>4 Hinweise</span></div>
+      <div class="clues">
+        <div class="clue"><span><b>Emma</b> sitzt ganz links.</span></div>
+        <div class="clue"><span><b>Mia</b> sitzt direkt links neben <b>Ben</b>.</span></div>
+        <div class="clue"><span><b>Noah</b> sitzt direkt links neben <b>Leo</b>.</span></div>
+        <div class="clue"><span><b>Lina</b> sitzt ganz rechts.</span></div>
+      </div>
+    </section>
+
+    <div class="message" id="message">Ordne alle sechs Personen zu.</div>
+    <div class="actions">
+      <button class="btn secondary" id="resetBtn">Zurücksetzen</button>
+      <button class="btn primary" id="checkBtn">Prüfen</button>
+    </div>
+  </main>
+
+  <div class="win" id="win">
+    <div class="win-card">
+      <div class="win-emoji">🎉</div>
+      <h1>Richtig!</h1>
+      <p>Alle sitzen auf dem richtigen Platz.</p>
+      <button class="btn primary" id="againBtn" style="width:100%">Nochmal spielen</button>
+    </div>
+  </div>
+
+<script>
+const people = [
+  {id:'mia', name:'Mia'}, {id:'leo', name:'Leo'}, {id:'emma', name:'Emma'},
+  {id:'noah', name:'Noah'}, {id:'lina', name:'Lina'}, {id:'ben', name:'Ben'}
+];
+const solution = ['emma','mia','ben','noah','leo','lina'];
+const seatsEl = document.getElementById('seats');
+const charsEl = document.getElementById('characters');
+const messageEl = document.getElementById('message');
+const winEl = document.getElementById('win');
+let seats = Array(6).fill(null);
+let drag = null;
+
+function avatarHTML(id, compact=false){
+  const extra = id==='emma' ? '<div class="glasses"><span></span></div>' : id==='noah' ? '<div class="cap"></div>' : '';
+  return `<div class="avatar ${compact?'compact':''}"><div class="head"><div class="eyes"></div>${extra}</div><div class="hair"></div><div class="body"></div><div class="legs"></div></div>`;
+}
+function personButton(p){
+  const btn = document.createElement('button');
+  btn.className = `char ${p.id}`;
+  btn.dataset.id = p.id;
+  btn.innerHTML = `${avatarHTML(p.id)}<div class="char-name">${p.name}</div>`;
+  btn.addEventListener('pointerdown', startDrag);
+  return btn;
+}
+function render(){
+  seatsEl.innerHTML='';
+  seats.forEach((pid,i)=>{
+    const seat=document.createElement('div');
+    seat.className='seat'; seat.dataset.index=i;
+    if(pid){
+      const p=people.find(x=>x.id===pid);
+      const placed=document.createElement('button');
+      placed.className=`char ${p.id} placed`;
+      placed.dataset.id=p.id;
+      placed.innerHTML=avatarHTML(p.id);
+      placed.addEventListener('pointerdown',startDrag);
+      seat.appendChild(placed);
+    }
+    const lab=document.createElement('div');lab.className='seat-label';lab.textContent=i+1;seat.appendChild(lab);
+    seatsEl.appendChild(seat);
+  });
+  charsEl.innerHTML='';
+  people.filter(p=>!seats.includes(p.id)).forEach(p=>charsEl.appendChild(personButton(p)));
+}
+function startDrag(e){
+  e.preventDefault();
+  const id=e.currentTarget.dataset.id;
+  const from=seats.indexOf(id);
+  drag={id,from,ghost:null};
+  e.currentTarget.classList.add('dragging');
+  const ghost=document.createElement('div');ghost.className=`drag-ghost char ${id}`;ghost.innerHTML=avatarHTML(id);document.body.appendChild(ghost);drag.ghost=ghost;
+  moveGhost(e.clientX,e.clientY);
+  window.addEventListener('pointermove',onMove,{passive:false});
+  window.addEventListener('pointerup',endDrag,{once:true});
+}
+function moveGhost(x,y){if(drag?.ghost){drag.ghost.style.left=x+'px';drag.ghost.style.top=y+'px';}}
+function targetSeat(x,y){
+  document.querySelectorAll('.seat').forEach(s=>s.classList.remove('drop-target'));
+  const el=document.elementFromPoint(x,y); const seat=el?.closest?.('.seat');
+  if(seat) seat.classList.add('drop-target');
+  return seat;
+}
+function onMove(e){e.preventDefault();moveGhost(e.clientX,e.clientY);targetSeat(e.clientX,e.clientY)}
+function endDrag(e){
+  window.removeEventListener('pointermove',onMove);
+  const seat=targetSeat(e.clientX,e.clientY);
+  document.querySelectorAll('.seat').forEach(s=>s.classList.remove('drop-target'));
+  document.querySelectorAll('.dragging').forEach(x=>x.classList.remove('dragging'));
+  drag?.ghost?.remove();
+  if(drag && seat){
+    const to=Number(seat.dataset.index);
+    const occupant=seats[to];
+    if(drag.from>=0) seats[drag.from]=null;
+    if(occupant && occupant!==drag.id){
+      if(drag.from>=0) seats[drag.from]=occupant;
+    }
+    seats[to]=drag.id;
+    messageEl.textContent='Ordne alle sechs Personen zu.'; messageEl.className='message';
+  }
+  drag=null; render();
+}
+function reset(){seats=Array(6).fill(null);messageEl.textContent='Ordne alle sechs Personen zu.';messageEl.className='message';winEl.classList.remove('show');render()}
+function check(){
+  if(seats.some(x=>!x)){messageEl.textContent='Es fehlen noch Personen auf den Sitzen.';messageEl.className='message error';return}
+  const ok=seats.every((x,i)=>x===solution[i]);
+  if(ok){messageEl.textContent='Perfekt gelöst!';messageEl.className='message ok';setTimeout(()=>winEl.classList.add('show'),180)}
+  else{messageEl.textContent='Noch nicht ganz. Prüfe die Hinweise noch einmal.';messageEl.className='message error';navigator.vibrate?.(80)}
+}
+document.getElementById('resetBtn').addEventListener('click',reset);
+document.getElementById('checkBtn').addEventListener('click',check);
+document.getElementById('againBtn').addEventListener('click',reset);
+render();
+if('serviceWorker' in navigator){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}));}
+</script>
+</body>
+</html>
